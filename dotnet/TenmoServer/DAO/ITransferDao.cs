@@ -8,7 +8,7 @@ namespace TenmoServer.DAO
 {
     public interface ITransferDao
     {
-        public void TransferMoney(int fromUserId, int toUserId, decimal transferAmount);
+        public void TransferMoney(int fromUserId, int toUserId, int transferTypeId, decimal transferAmount);
         public IList<Transfer> GetAllUserTransfers(int userId);
         public Transfer GetTransferById(int transferId);
     }
