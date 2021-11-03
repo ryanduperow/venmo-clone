@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TenmoServer.DAO
 {
-    public class AccountSqlDao : IAccountSqlDao
+    public class AccountSqlDao : IAccountDao
     {
 
         private readonly string connectionString;

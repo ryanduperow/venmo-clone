@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TenmoServer.DAO
 {
-    public interface IAccountSqlDao
+    public interface IAccountDao
     {
         public decimal GetAccountBalance(int userId);
         public bool WithdrawFromAccount(int userId, decimal amountToWithdraw);
