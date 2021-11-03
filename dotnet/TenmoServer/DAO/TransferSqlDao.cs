@@ -19,8 +19,8 @@ namespace TenmoServer.DAO
             List<Transfer> listOfTransfers = new List<Transfer>();
 
             //TODO: Call this only once or not at all
-            UserSqlDao userSqlDao = new UserSqlDao(connectionString);
-            int accountID = userSqlDao.GetUserAccountID(userId);
+            //UserSqlDao userSqlDao = new UserSqlDao(connectionString);
+            //int accountID = userSqlDao.GetUserAccountID(userId);
 
             try
             {
@@ -28,8 +28,8 @@ namespace TenmoServer.DAO
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfers WHERE account_from = @account_id OR account_to = @account_id", conn);
-                    cmd.Parameters.AddWithValue("@account_id", accountID);
+                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfers t JOIN accounts a ON a.account_id = t.account_from JOIN accounts b ON b.account_id = t.account_to WHERE a.user_id = @user_id OR b.user_id = @user_id", conn);
+                    cmd.Parameters.AddWithValue("@user_id", userId);
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
