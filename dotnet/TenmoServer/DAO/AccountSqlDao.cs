@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using TenmoServer.Models;
 
 namespace TenmoServer.DAO
 {
@@ -16,9 +17,9 @@ namespace TenmoServer.DAO
             connectionString = dbConnectionString;
         }
 
-        public void DepositToAccount(int userId, decimal amountToDeposit)
+        public void DepositToAccount(int accountId, decimal amountToDeposit)
         {
-            decimal balance = GetAccountBalance(userId);
+            decimal balance = GetAccountById(accountId).Balance;
             balance += amountToDeposit;
 
             try
@@ -27,8 +28,8 @@ namespace TenmoServer.DAO
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("UPDATE accounts SET balance = @balance WHERE user_id = @user_id", conn);
-                    cmd.Parameters.AddWithValue("@user_id", userId);
+                    SqlCommand cmd = new SqlCommand("UPDATE accounts SET balance = @balance WHERE account_id = @account_id", conn);
+                    cmd.Parameters.AddWithValue("@account_id", accountId);
                     cmd.Parameters.AddWithValue("@balance", balance);
                     cmd.ExecuteNonQuery();
                 }
@@ -68,9 +69,10 @@ namespace TenmoServer.DAO
         }
          
 
-        public bool WithdrawFromAccount(int userId, decimal amountToWithdraw)
+        public bool WithdrawFromAccount(int accountId, decimal amountToWithdraw)
         {
-            decimal balance = GetAccountBalance(userId);
+            //TODO: check overdrawing here or in the controller??
+            decimal balance = GetAccountById(accountId).Balance;
             if (amountToWithdraw > balance)
             {
                 return false;
@@ -84,8 +86,8 @@ namespace TenmoServer.DAO
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("UPDATE accounts SET balance = @balance WHERE user_id = @user_id", conn);
-                    cmd.Parameters.AddWithValue("@user_id", userId);
+                    SqlCommand cmd = new SqlCommand("UPDATE accounts SET balance = @balance WHERE account_id = @account_id", conn);
+                    cmd.Parameters.AddWithValue("@account_id", accountId);
                     cmd.Parameters.AddWithValue("@balance", balance);
                     cmd.ExecuteNonQuery();
                 }
@@ -96,6 +98,43 @@ namespace TenmoServer.DAO
             }
 
             return true;
+        }
+
+        public Account GetAccountById(int accountId)
+        {
+            Account account = new Account();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("SELECT account_id, user_id, balance FROM accounts WHERE account_id = @account_id;", conn);
+                    cmd.Parameters.AddWithValue("@account_id", accountId);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        account = GetAccountFromReader(reader);
+                    }
+                }
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+
+            return account;
+        }
+
+        private Account GetAccountFromReader(SqlDataReader reader)
+        {
+            return new Account()
+            {
+                AccountId = Convert.ToInt32(reader["account_id"]),
+                UserId = Convert.ToInt32(reader["user_id"]),
+                Balance = Convert.ToDecimal(reader["balance"]),
+            };
         }
     }
 }

@@ -12,11 +12,13 @@ namespace TenmoServer.Controllers
     {
         private readonly ITransferDao transferDao;
         private readonly IUserDao userDao;
+        private readonly IAccountDao accountDao;
 
-        public TransfersController(ITransferDao _transferDao, IUserDao _userDao)
+        public TransfersController(ITransferDao _transferDao, IUserDao _userDao, IAccountDao _accountDao)
         {
             transferDao = _transferDao;
             userDao = _userDao;
+            accountDao = _accountDao;
         }
 
         [HttpGet]
@@ -33,9 +35,39 @@ namespace TenmoServer.Controllers
         {
             string userName = User.Identity.Name;
             int userId = userDao.GetUser(userName).UserId;
-            Transfer createdTransfrer = transferDao.TransferMoney(transfer);
-            // TODO: Add validation to make sure the from account is the same as the logged in user
-            return Created($"{createdTransfrer.TransferID}", createdTransfrer);
+
+
+            // Check to make sure the 'from' account is the same as the logged in user's
+            int accountNumber = userDao.GetUserAccountID(userId);
+            if (transfer.AccountFrom != accountNumber)
+            {
+                return Forbid();
+            }
+
+            // Check to make sure the 'to' account exists
+            Account toAccount = accountDao.GetAccountById(transfer.AccountTo);
+            if (toAccount == null)
+            {
+                return NotFound();
+            }
+
+            // Make sure the account has sufficient funds for the transfer
+            Account userAccount = accountDao.GetAccountById(accountNumber);
+            if (userAccount.Balance < transfer.Amount)
+            {
+                //TODO: ask Mike or Joe about correct HTTP response code for this
+                return Ok();
+            }
+
+            Account fromAccount = accountDao.GetAccountById(transfer.AccountFrom);
+
+            //Actually perform the withdrawal and deposit
+            accountDao.WithdrawFromAccount(fromAccount.AccountId, transfer.Amount);
+            accountDao.DepositToAccount(toAccount.AccountId, transfer.Amount);
+
+            //Create the transfer
+            Transfer createdTransfer = transferDao.TransferMoney(transfer);
+            return Created($"{createdTransfer.TransferID}", createdTransfer);
 
         }
 

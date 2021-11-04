@@ -49,14 +49,14 @@ namespace TenmoServer.DAO
 
         public Transfer GetTransferById(int transferId)
         {
-            Transfer transfer = new Transfer();
+            Transfer transfer = null;
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfers WHERE transfer_id = transfer_id;", conn);
+                    SqlCommand cmd = new SqlCommand("SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfers WHERE transfer_id = @transfer_id;", conn);
                     cmd.Parameters.AddWithValue("@transfer_id", transferId);
                     SqlDataReader reader = cmd.ExecuteReader();
 
@@ -82,7 +82,7 @@ namespace TenmoServer.DAO
                 {
                     conn.Open();
                     //TODO: if they ever change what transfer status 1 means, this will break
-                    SqlCommand cmd = new SqlCommand("INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount) OUTPUT INSERTED.id VALUES(@transfer_type_id, 1, @account_from, @account_to, @amount); ", conn);
+                    SqlCommand cmd = new SqlCommand("INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount) OUTPUT INSERTED.transfer_id VALUES(@transfer_type_id, 1, @account_from, @account_to, @amount); ", conn);
                     cmd.Parameters.AddWithValue("@transfer_type_id", transfer.TransferTypeID);
                     cmd.Parameters.AddWithValue("@account_from", transfer.AccountFrom);
                     cmd.Parameters.AddWithValue("@account_to", transfer.AccountTo);
