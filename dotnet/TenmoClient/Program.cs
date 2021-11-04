@@ -8,6 +8,7 @@ namespace TenmoClient
     {
         private static readonly ConsoleService consoleService = new ConsoleService();
         private static readonly AuthService authService = new AuthService();
+        private static readonly AccountService accountService = new AccountService();
 
         static void Main(string[] args)
         {
@@ -90,11 +91,14 @@ namespace TenmoClient
                 }
                 else if (menuSelection == 1)
                 {
-
+                    UserService.GetToken();
+                    Console.WriteLine($"{accountService.GetBalance()}");
                 }
                 else if (menuSelection == 2)
                 {
-
+                    // Not working.  returning "System.Collections.Generic.List" instead of an actual transfer
+                    UserService.GetToken();
+                    Console.WriteLine($"{accountService.GetTransferList()}");
                 }
                 else if (menuSelection == 3)
                 {
