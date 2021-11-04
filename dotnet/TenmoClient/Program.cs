@@ -96,9 +96,14 @@ namespace TenmoClient
                 }
                 else if (menuSelection == 2)
                 {
-                    // Not working.  returning "System.Collections.Generic.List" instead of an actual transfer
+                    // Works, just need to get the formatting right.  
                     UserService.GetToken();
-                    Console.WriteLine($"{accountService.GetTransferList()}");
+                    List<Transfer> transfers = accountService.GetTransferList();
+
+                    foreach (Transfer transfer in transfers)
+                    {
+                        Console.WriteLine(transfer.FormattedTransfer);
+                    }
                 }
                 else if (menuSelection == 3)
                 {
