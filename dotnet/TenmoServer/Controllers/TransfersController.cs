@@ -13,9 +13,10 @@ namespace TenmoServer.Controllers
         private readonly ITransferDao transferDao;
         private readonly IUserDao userDao;
 
-        public TransfersController(ITransferDao _transferDao, IUserDao userDao)
+        public TransfersController(ITransferDao _transferDao, IUserDao _userDao)
         {
             transferDao = _transferDao;
+            userDao = _userDao;
         }
 
         [HttpGet]
@@ -28,12 +29,28 @@ namespace TenmoServer.Controllers
         }
 
         [HttpPost("new")]
-        public Transfer CreateTransfer(Transfer transfer)
+        public IActionResult CreateTransfer(Transfer transfer)
         {
             string userName = User.Identity.Name;
             int userId = userDao.GetUser(userName).UserId;
-            Transfer createdTransfrer = transferDao.TransferMoney(userId, );
+            Transfer createdTransfrer = transferDao.TransferMoney(transfer);
+            // TODO: Add validation to make sure the from account is the same as the logged in user
+            return Created($"{createdTransfrer.TransferID}", createdTransfrer);
 
+        }
+
+        [HttpGet("{transferId}")]
+        public IActionResult GetTransferById(int transferId)
+        {
+            Transfer transfer = transferDao.GetTransferById(transferId);
+            if (transfer != null)
+            {
+                return Ok(transfer); 
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }
