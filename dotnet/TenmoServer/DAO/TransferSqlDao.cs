@@ -74,30 +74,31 @@ namespace TenmoServer.DAO
             return transfer;
         }
 
-        public void TransferMoney(int fromUserId, int toUserId, int transferTypeId, decimal transferAmount)
+        public Transfer TransferMoney(Transfer transfer)
         {
-            UserSqlDao userSqlDao = new UserSqlDao(connectionString);
-            int fromAccountID = userSqlDao.GetUserAccountID(fromUserId);
-            int toAccountID = userSqlDao.GetUserAccountID(toUserId);
-         
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
                     //TODO: if they ever change what transfer status 1 means, this will break
-                    SqlCommand cmd = new SqlCommand("INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES(@transfer_type_id, 1, @account_from, @account_to, @amount); ", conn);
-                    cmd.Parameters.AddWithValue("@transfer_type_id", transferTypeId);
-                    cmd.Parameters.AddWithValue("@account_from", fromAccountID);
-                    cmd.Parameters.AddWithValue("@account_to", toAccountID);
-                    cmd.Parameters.AddWithValue("@amount", transferAmount);
-                    cmd.ExecuteNonQuery();
+                    SqlCommand cmd = new SqlCommand("INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount) OUTPUT INSERTED.id VALUES(@transfer_type_id, 1, @account_from, @account_to, @amount); ", conn);
+                    cmd.Parameters.AddWithValue("@transfer_type_id", transfer.TransferTypeID);
+                    cmd.Parameters.AddWithValue("@account_from", transfer.AccountFrom);
+                    cmd.Parameters.AddWithValue("@account_to", transfer.AccountTo);
+                    cmd.Parameters.AddWithValue("@amount", transfer.Amount);
+
+                    transfer.TransferID = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    //cmd.ExecuteNonQuery();
                 }
             }
             catch (SqlException)
             {
                 throw;
             }
+
+            return transfer;
         }
 
         private Transfer GetTransferFromReader(SqlDataReader reader)
