@@ -11,29 +11,18 @@ namespace TenmoServer.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountDao accountDao;
-        private readonly IUserDao userDao;
 
-        public AccountController(IAccountDao _accountDao, IUserDao _userDao)
+        public AccountController(IAccountDao _accountDao)
         {
             accountDao = _accountDao;
-            userDao = _userDao;
         }
 
         [HttpGet("balance")]
         public IActionResult GetBalance()
         {
-            string userName = User.Identity.Name;
-            int userId = userDao.GetUser(userName).UserId;
-
+            int userId = int.Parse(User.FindFirst("sub")?.Value);
             decimal accountBalance = accountDao.GetAccountBalance(userId);
             return Ok(accountBalance);
-            //TODO: figure out what this actually does
-
-            //int accountID = userSqlDao.GetUserAccountID(userId);
-            //TODO: There is a way to get the userID 
-            //string userName = User.Identity.Name;
-            //decimal accountBalance = accountDao.GetAccountBalance(userId);
-            // TODO: Do we need to send a bad request message back if the user doesn't exist or something?
         }
     }
 }
