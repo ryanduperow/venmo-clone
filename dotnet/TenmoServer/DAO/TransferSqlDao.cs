@@ -18,10 +18,6 @@ namespace TenmoServer.DAO
         {
             List<Transfer> listOfTransfers = new List<Transfer>();
 
-            //TODO: Call this only once or not at all
-            //UserSqlDao userSqlDao = new UserSqlDao(connectionString);
-            //int accountID = userSqlDao.GetUserAccountID(userId);
-
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))

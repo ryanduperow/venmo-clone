@@ -56,7 +56,7 @@ namespace TenmoServer.Controllers
             if (userAccount.Balance < transfer.Amount)
             {
                 //TODO: ask Mike or Joe about correct HTTP response code for this
-                return Ok();
+                return BadRequest();
             }
 
             Account fromAccount = accountDao.GetAccountById(transfer.AccountFrom);
