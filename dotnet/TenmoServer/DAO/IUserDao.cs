@@ -9,6 +9,5 @@ namespace TenmoServer.DAO
         User AddUser(string username, string password);
         List<User> GetUsers();
         List<ListUser> GetUsersPublicFacing();
-        int GetUserAccountID(int userId);
     }
 }
