@@ -19,4 +19,18 @@
         public string Username { get; set; }
         public string Password { get; set; }
     }
+
+    /// <summary>
+    /// Return value from list endpoint
+    /// </summary>
+    public class ListUser
+    {
+        public int UserId { get; set; }
+        public string Username { get; set; }
+
+        public string FormattedUser()
+        {
+            return $"{UserId}: {Username}";
+        }
+    }
 }
