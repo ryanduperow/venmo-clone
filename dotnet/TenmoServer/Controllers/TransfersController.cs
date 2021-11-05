@@ -33,13 +33,10 @@ namespace TenmoServer.Controllers
         [HttpPost("new")]
         public IActionResult CreateTransfer(Transfer transfer)
         {
-            string userName = User.Identity.Name;
-            int userId = userDao.GetUser(userName).UserId;
-
+            User user = userDao.GetUser(User.Identity.Name);
 
             // Check to make sure the 'from' account is the same as the logged in user's
-            int accountNumber = userDao.GetUserAccountID(userId);
-            if (transfer.AccountFrom != accountNumber)
+            if (transfer.AccountFrom != user.AccountId)
             {
                 return Forbid();
             }
@@ -52,7 +49,7 @@ namespace TenmoServer.Controllers
             }
 
             // Make sure the account has sufficient funds for the transfer
-            Account userAccount = accountDao.GetAccountById(accountNumber);
+            Account userAccount = accountDao.GetAccountById(user.AccountId);
             if (userAccount.Balance < transfer.Amount)
             {
                 //TODO: ask Mike or Joe about correct HTTP response code for this
