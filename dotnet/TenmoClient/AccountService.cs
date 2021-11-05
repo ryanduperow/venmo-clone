@@ -37,14 +37,12 @@ namespace TenmoClient
             }            
         }
 
-        public List<Transfer> GetTransferList()
+        public IList<ListUser> GetUsers()
         {
             client.Authenticator = new JwtAuthenticator(UserService.GetToken());
-            RestRequest request = new RestRequest(API_BASE_URL + "transfers");
-            IRestResponse<List<Transfer>> response = client.Get<List<Transfer>>(request);
-            return response.Data;   
+            RestRequest request = new RestRequest(API_BASE_URL + "users");
+            IRestResponse<IList<ListUser>> response = client.Get<IList<ListUser>>(request);
+            return response.Data;
         }
-
-
     }
 }

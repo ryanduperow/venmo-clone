@@ -9,6 +9,7 @@ namespace TenmoClient
         private static readonly ConsoleService consoleService = new ConsoleService();
         private static readonly AuthService authService = new AuthService();
         private static readonly AccountService accountService = new AccountService();
+        private static readonly TransferService transferService = new TransferService();
 
         static void Main(string[] args)
         {
@@ -91,14 +92,11 @@ namespace TenmoClient
                 }
                 else if (menuSelection == 1)
                 {
-                    UserService.GetToken();
                     Console.WriteLine($"{accountService.GetBalance()}");
                 }
                 else if (menuSelection == 2)
                 {
-                    // Works, just need to get the formatting right.  
-                    UserService.GetToken();
-                    List<Transfer> transfers = accountService.GetTransferList();
+                    IList<Transfer> transfers = transferService.GetTransferList();
 
                     foreach (Transfer transfer in transfers)
                     {
@@ -107,11 +105,20 @@ namespace TenmoClient
                 }
                 else if (menuSelection == 3)
                 {
-
+                    
+                    
                 }
                 else if (menuSelection == 4)
                 {
+                    IList<ListUser> users = accountService.GetUsers();
 
+                    foreach (ListUser user in users)
+                    {
+                        Console.WriteLine(user.FormattedUser());
+                    }
+                    int toAccountId = consoleService.PromptForRecipientID();
+                    decimal amount = consoleService.PromptForAmount();
+                    transferService.CreateNewTransfer(UserService.GetUserId(), toAccountId, 2, amount);
                 }
                 else if (menuSelection == 5)
                 {
