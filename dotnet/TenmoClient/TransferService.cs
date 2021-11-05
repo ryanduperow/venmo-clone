@@ -20,21 +20,8 @@ namespace TenmoClient
             return response.Data;
         }
 
-        public Transfer CreateNewTransfer(int fromAccountNumber, int toAccountNumber, int transferType, decimal amount)
+        public Transfer CreateNewTransfer(Transfer transfer)
         {
-            
-            // Need to know:
-            // The sending user's account number (we have)
-            // The recipient user's account number (the user provides this)
-            // the transfer type (2/'send' by default)
-            // the amount (the user provides this)
-
-            Transfer transfer = new Transfer();
-            transfer.AccountFrom = fromAccountNumber;
-            transfer.AccountTo = toAccountNumber;
-            transfer.TransferTypeID = transferType;
-            transfer.Amount = amount;
-
             client.Authenticator = new JwtAuthenticator(UserService.GetToken());
             RestRequest request = new RestRequest(API_BASE_URL + "transfers/new");
             request.AddJsonBody(transfer);

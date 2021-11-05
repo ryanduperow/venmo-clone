@@ -92,7 +92,7 @@ namespace TenmoClient
                 }
                 else if (menuSelection == 1)
                 {
-                    Console.WriteLine($"{accountService.GetBalance()}");
+                    Console.WriteLine($"Your account balance: ${accountService.GetBalance()}");
                 }
                 else if (menuSelection == 2)
                 {
@@ -118,7 +118,17 @@ namespace TenmoClient
                     }
                     int toAccountId = consoleService.PromptForRecipientID();
                     decimal amount = consoleService.PromptForAmount();
-                    transferService.CreateNewTransfer(UserService.GetAccountId(), toAccountId, 2, amount);
+
+                    Transfer transfer = new Transfer
+                    {
+                        AccountFrom = UserService.GetAccountId(),
+                        AccountTo = toAccountId,
+                        TransferTypeID = 2,
+                        Amount = amount
+                    };
+
+                    Console.WriteLine("Response:", transferService.CreateNewTransfer(transfer));
+                    Console.ReadLine();
                 }
                 else if (menuSelection == 5)
                 {
