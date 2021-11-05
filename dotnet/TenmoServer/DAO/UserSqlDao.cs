@@ -27,7 +27,7 @@ namespace TenmoServer.DAO
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT u.user_id, u.username, a.account_id, u.salt, u.password_hash FROM users u JOIN accounts a ON a.user_id = u.user_id", conn);
+                    SqlCommand cmd = new SqlCommand("SELECT u.user_id, u.username, a.account_id, u.salt, u.password_hash FROM users u JOIN accounts a ON a.user_id = u.user_id WHERE u.username = @username", conn);
                     cmd.Parameters.AddWithValue("@username", username);
                     SqlDataReader reader = cmd.ExecuteReader();
 
@@ -169,7 +169,7 @@ namespace TenmoServer.DAO
 
         private User GetUserFromReader(SqlDataReader reader)
         {
-            User u = new User()
+            return new User()
             {
                 UserId = Convert.ToInt32(reader["user_id"]),
                 Username = Convert.ToString(reader["username"]),
@@ -177,8 +177,6 @@ namespace TenmoServer.DAO
                 Salt = Convert.ToString(reader["salt"]),
                 AccountId = Convert.ToInt32(reader["account_id"])
             };
-
-            return u;
         }
     }
 }
