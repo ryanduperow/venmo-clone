@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TenmoClient.Models
+﻿namespace TenmoClient.Models
 {
     public class Transfer
     {
@@ -13,13 +9,11 @@ namespace TenmoClient.Models
         public int AccountTo { get; set; }
         public decimal Amount { get; set; }
 
-        private int myVar;
-
         public string FormattedTransfer
         {
             get 
             { 
-                return $"{TransferID} {Amount}"; 
+                return $"[{TransferID}]: Transfer ${Amount} from {AccountFrom} to {AccountTo}. TypeID:{TransferTypeID} Status:{TransferStatusID}"; 
             }
             
         }
