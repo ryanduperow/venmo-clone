@@ -9,6 +9,7 @@
         public string Username { get; set; }
         public string Token { get; set; }
         public string Message { get; set; }
+        public int AccountId { get; set; }
     }
 
     /// <summary>
@@ -27,10 +28,11 @@
     {
         public int UserId { get; set; }
         public string Username { get; set; }
+        public int AccountId { get; set; }
 
         public string FormattedUser()
         {
-            return $"{UserId}: {Username}";
+            return $"{AccountId}: {Username}";
         }
     }
 }

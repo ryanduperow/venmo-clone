@@ -7,6 +7,7 @@
         public string PasswordHash { get; set; }
         public string Salt { get; set; }
         public string Email { get; set; }
+        public int AccountId { get; set; }
     }
 
     /// <summary>
@@ -18,6 +19,7 @@
         public string Username { get; set; }
         //public string Role { get; set; }
         public string Token { get; set; }
+        public int AccountId { get; set; }
     }
 
     /// <summary>
@@ -27,5 +29,12 @@
     {
         public string Username { get; set; }
         public string Password { get; set; }
+    }
+
+    public class ListUser
+    {
+        public int UserId { get; set; }
+        public string Username { get; set; }
+        public int AccountId { get; set; }
     }
 }

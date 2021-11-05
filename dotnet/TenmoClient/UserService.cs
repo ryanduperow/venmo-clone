@@ -16,6 +16,11 @@ namespace TenmoClient
             return user.UserId;
         }
 
+        public static int GetAccountId()
+        {
+            return user.AccountId;
+        }
+
         public static bool IsLoggedIn()
         {
             return !string.IsNullOrWhiteSpace(user.Token);

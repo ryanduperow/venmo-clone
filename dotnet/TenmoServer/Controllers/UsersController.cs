@@ -22,7 +22,7 @@ namespace TenmoServer.Controllers
         [HttpGet]
         public IActionResult GetAllUsers()
         {
-            IList<User> listOfUsers = userDao.GetUsersPublicFacing();
+            IList<ListUser> listOfUsers = userDao.GetUsersPublicFacing();
             if (listOfUsers != null)
             {
                 return Ok(listOfUsers);

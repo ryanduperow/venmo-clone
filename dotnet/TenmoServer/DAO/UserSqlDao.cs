@@ -27,7 +27,7 @@ namespace TenmoServer.DAO
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT user_id, username, password_hash, salt FROM users WHERE username = @username", conn);
+                    SqlCommand cmd = new SqlCommand("SELECT u.user_id, u.username, a.account_id, u.salt, u.password_hash FROM users u JOIN accounts a ON a.user_id = u.user_id", conn);
                     cmd.Parameters.AddWithValue("@username", username);
                     SqlDataReader reader = cmd.ExecuteReader();
 
@@ -73,9 +73,9 @@ namespace TenmoServer.DAO
             return returnUsers;
         }
 
-        public List<User> GetUsersPublicFacing()
+        public List<ListUser> GetUsersPublicFacing()
         {
-            List<User> returnUsers = new List<User>();
+            List<ListUser> returnUsers = new List<ListUser>();
 
             try
             {
@@ -83,15 +83,16 @@ namespace TenmoServer.DAO
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("SELECT user_id, username FROM users", conn);
+                    SqlCommand cmd = new SqlCommand("SELECT u.user_id, u.username, a.account_id FROM users u JOIN accounts a ON a.user_id = u.user_id", conn);
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        User user = new User
+                        ListUser user = new ListUser
                         {
                             UserId = Convert.ToInt32(reader["user_id"]),
-                            Username = Convert.ToString(reader["username"])
+                            Username = Convert.ToString(reader["username"]),
+                            AccountId = Convert.ToInt32(reader["account_id"])
                         };
                         returnUsers.Add(user);
                     }
@@ -174,6 +175,7 @@ namespace TenmoServer.DAO
                 Username = Convert.ToString(reader["username"]),
                 PasswordHash = Convert.ToString(reader["password_hash"]),
                 Salt = Convert.ToString(reader["salt"]),
+                AccountId = Convert.ToInt32(reader["account_id"])
             };
 
             return u;

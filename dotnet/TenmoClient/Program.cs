@@ -118,7 +118,7 @@ namespace TenmoClient
                     }
                     int toAccountId = consoleService.PromptForRecipientID();
                     decimal amount = consoleService.PromptForAmount();
-                    transferService.CreateNewTransfer(UserService.GetUserId(), toAccountId, 2, amount);
+                    transferService.CreateNewTransfer(UserService.GetAccountId(), toAccountId, 2, amount);
                 }
                 else if (menuSelection == 5)
                 {
