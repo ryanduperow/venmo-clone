@@ -27,7 +27,6 @@ namespace TenmoServer.Controllers
             string userName = User.Identity.Name;
             int userId = userDao.GetUser(userName).UserId;
             return Ok(transferDao.GetAllUserTransfers(userId));
-            // TODO: Add error handling in case list is empty
         }
 
         [HttpPost("new")]
@@ -35,25 +34,36 @@ namespace TenmoServer.Controllers
         {
             User user = userDao.GetUser(User.Identity.Name);
 
+            // Make sure the transfer type ID and status are 2
+            if (transfer.TransferTypeID != 2 || transfer.TransferStatusID != 2)
+            {
+                return BadRequest("You may only create a transfer with 'send' type and 'approved' status.");
+            }
+
+            // Make sure the transfer amount is greater than zero
+            if (transfer.Amount <= 0)
+            {
+                return BadRequest("Transfer amount must be greater than 0.00.");
+            }
+
             // Check to make sure the 'from' account is the same as the logged in user's
             if (transfer.AccountFrom != user.AccountId)
             {
-                return Forbid();
+                return BadRequest("You may only create a transfer from your own account.");
             }
 
             // Check to make sure the 'to' account exists
             Account toAccount = accountDao.GetAccountById(transfer.AccountTo);
             if (toAccount == null)
             {
-                return NotFound();
+                return NotFound("You cannot transfer money to a nonexistent account.");
             }
 
             // Make sure the account has sufficient funds for the transfer
             Account userAccount = accountDao.GetAccountById(user.AccountId);
             if (userAccount.Balance < transfer.Amount)
             {
-                //TODO: ask Mike or Joe about correct HTTP response code for this
-                return BadRequest();
+                return BadRequest("Your account contains insufficient funds for transfer.");
             }
 
             Account fromAccount = accountDao.GetAccountById(transfer.AccountFrom);
