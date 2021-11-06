@@ -124,6 +124,7 @@ namespace TenmoClient
                         AccountFrom = UserService.GetAccountId(),
                         AccountTo = toAccountId,
                         TransferTypeID = 2,
+                        TransferStatusID = 2,
                         Amount = amount
                     };
 
