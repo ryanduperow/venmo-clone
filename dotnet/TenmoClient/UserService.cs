@@ -15,7 +15,7 @@ namespace TenmoClient
         {
             return user.UserId;
         }
-
+        //New GetAccountId method that returns the user's accountId as part of our continuing campaign to map userIDs and accountIds 1:1
         public static int GetAccountId()
         {
             return user.AccountId;

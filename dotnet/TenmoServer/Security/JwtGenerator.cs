@@ -23,6 +23,7 @@ namespace TenmoServer.Security
 
         public string GenerateToken(int userId, string username, string role)
         {
+            // The claim that holds the UserID is named "sub"
             List<Claim> claims = new List<Claim>()
             {
                 new Claim("sub", userId.ToString()),

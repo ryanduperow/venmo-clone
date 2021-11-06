@@ -19,6 +19,7 @@ namespace TenmoServer.Controllers
             userDao = _userDao;
         }
 
+        //This uses the 'GetAllUsersPublicFacing' method so as to avoid exposing confidential user information to the endpoint
         [HttpGet]
         public IActionResult GetAllUsers()
         {

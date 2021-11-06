@@ -16,7 +16,8 @@ namespace TenmoServer.DAO
         {
             connectionString = dbConnectionString;
         }
-
+        // We modified the GetUser method to also return the user's account number (since right now users and accounts are mapped 1:1)
+        // This would present issues in a version of the application where users could have more than one account.
         public User GetUser(string username)
         {
             User returnUser = null;
@@ -73,6 +74,7 @@ namespace TenmoServer.DAO
             return returnUsers;
         }
 
+        // A special version of GetUsers that returns the limited 'ListUser'-- a version of user that includes only public-facing fields.
         public List<ListUser> GetUsersPublicFacing()
         {
             List<ListUser> returnUsers = new List<ListUser>();

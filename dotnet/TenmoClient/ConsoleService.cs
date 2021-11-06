@@ -29,7 +29,7 @@ namespace TenmoClient
         public int PromptForRecipientID()
         {
             Console.WriteLine("");
-            Console.Write("Please enter the ID of the account you would like to transfer money to (0 to cancel): ");
+            Console.Write("Please enter the ID of the account you would like to transfer money to: ");
             if (!int.TryParse(Console.ReadLine(), out int accountId))
             {
                 Console.WriteLine("Invalid input. Only input a number.");
@@ -44,7 +44,7 @@ namespace TenmoClient
         public decimal PromptForAmount()
         {
             Console.WriteLine("");
-            Console.Write("Please enter the amount of money you wish to transfer (0 to cancel): ");
+            Console.Write("Please enter the amount of money you wish to transfer: ");
             if (!decimal.TryParse(Console.ReadLine(), out decimal amount))
             {
                 Console.WriteLine("Invalid input. Only input a decimal number.");

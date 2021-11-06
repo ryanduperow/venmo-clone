@@ -72,6 +72,7 @@ namespace TenmoServer.DAO
         public bool WithdrawFromAccount(int accountId, decimal amountToWithdraw)
         {
             decimal balance = GetAccountById(accountId).Balance;
+            // This may not be necessary anymore now that we are performing error checking earlier in the process
             if (amountToWithdraw > balance)
             {
                 return false;

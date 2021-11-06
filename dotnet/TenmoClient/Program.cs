@@ -10,6 +10,7 @@ namespace TenmoClient
         private static readonly AuthService authService = new AuthService();
         private static readonly AccountService accountService = new AccountService();
         private static readonly TransferService transferService = new TransferService();
+        //We initialized the new services we had created here so we could use them below
 
         static void Main(string[] args)
         {
@@ -80,8 +81,8 @@ namespace TenmoClient
                 Console.WriteLine("2: View your past transfers");
                 Console.WriteLine("3: View an idividual transfer");
                 Console.WriteLine("4: Send TE bucks");
-                Console.WriteLine("5: Request TE bucks");
-                Console.WriteLine("6: Log in as different user");
+                //Console.WriteLine("5: Request TE bucks");
+                Console.WriteLine("5: Log in as different user");
                 Console.WriteLine("0: Exit");
                 Console.WriteLine("---------");
                 Console.Write("Please choose an option: ");
@@ -94,6 +95,7 @@ namespace TenmoClient
                 {
                     Console.WriteLine($"Your account balance: ${accountService.GetBalance()}");
                 }
+                // Past transfers
                 else if (menuSelection == 2)
                 {
                     IList<Transfer> transfers = transferService.GetTransferList();
@@ -103,13 +105,13 @@ namespace TenmoClient
                         Console.WriteLine(transfer.FormattedTransfer);
                     }
                 }
+                // Get individual transfer
                 else if (menuSelection == 3)
                 {
-
                         int tranferId = consoleService.PromptForTransferID("view");
                         Console.WriteLine(transferService.GetTransferById(tranferId));
-                 
                 }
+                //New transfer
                 else if (menuSelection == 4)
                 {
                     IList<ListUser> users = accountService.GetUsers();
@@ -121,8 +123,11 @@ namespace TenmoClient
                     int toAccountId = consoleService.PromptForRecipientID();
                     decimal amount = consoleService.PromptForAmount();
 
+                    // Assemble a new transfer object to pass into our transferService.CreateNewTransfer
                     Transfer transfer = new Transfer
                     {
+                        //The values here are hardcoded because when creating a new transfer,
+                        // the status type and transfer status will always be 2 ('send' type and 'approved' status)
                         AccountFrom = UserService.GetAccountId(),
                         AccountTo = toAccountId,
                         TransferTypeID = 2,
@@ -134,10 +139,6 @@ namespace TenmoClient
                     Console.ReadLine();
                 }
                 else if (menuSelection == 5)
-                {
-
-                }
-                else if (menuSelection == 6)
                 {
                     Console.WriteLine("");
                     UserService.SetLogin(new ApiUser()); //wipe out previous login info

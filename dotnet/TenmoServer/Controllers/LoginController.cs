@@ -35,6 +35,7 @@ namespace TenmoServer.Controllers
                 // Create an authentication token
                 string token = tokenGenerator.GenerateToken(user.UserId, user.Username/*, user.Role*/);
 
+                // We modified the ReturnUser to include an AccountId as part of our overall 1:1 userId/accountId unification scheme
                 // Create a ReturnUser object to return to the client
                 ReturnUser retUser = new ReturnUser() { UserId = user.UserId, AccountId = user.AccountId,  Username = user.Username, /*Role = user.Role,*/ Token = token };
 

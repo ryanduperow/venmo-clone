@@ -14,6 +14,7 @@ namespace TenmoServer.DAO
             connectionString = dbConnectionString;
         }
 
+        // In GetAllUserTransfers we join the accounts table on the transfers table twice to catch any transfers the userID parameter was associated with-- whether they were the sender or the recipient. (Mike explained this to us)
         public IList<Transfer> GetAllUserTransfers(int userId)
         {
             List<Transfer> listOfTransfers = new List<Transfer>();

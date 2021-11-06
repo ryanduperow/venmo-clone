@@ -62,7 +62,9 @@ namespace TenmoClient
             request.AddJsonBody(transfer);
 
             IRestResponse<Transfer> response = client.Post<Transfer>(request);
-
+            // RestSharp seems to return an 'error' status when recieving 400-series errors;
+            // we altered the standard format here to check only whether the request was successful, not whether it was completed
+            // (which could potentially be an issue if incomplete requests are not implicitly unsuccesful.)
             //if (response.ResponseStatus != ResponseStatus.Completed)
             //{
             //    Console.WriteLine("An error occurred communicating with the server.");
@@ -80,3 +82,4 @@ namespace TenmoClient
         }
     }
 }
+))

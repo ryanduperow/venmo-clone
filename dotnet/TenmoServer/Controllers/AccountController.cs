@@ -20,6 +20,7 @@ namespace TenmoServer.Controllers
         [HttpGet("balance")]
         public IActionResult GetBalance()
         {
+            // We get the user's ID from the built-in claims object using the name "sub" and parse it back into an ID
             int userId = int.Parse(User.FindFirst("sub")?.Value);
             decimal accountBalance = accountDao.GetAccountBalance(userId);
             return Ok(accountBalance);

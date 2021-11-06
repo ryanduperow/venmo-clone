@@ -32,6 +32,7 @@ namespace TenmoServer.Controllers
         [HttpPost("new")]
         public IActionResult CreateTransfer(Transfer transfer)
         {
+            //TODO would have been to split these out into their own service
             User user = userDao.GetUser(User.Identity.Name);
 
             // Make sure the transfer type ID and status are 2
