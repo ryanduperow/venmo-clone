@@ -20,6 +20,14 @@ namespace TenmoClient
             return response.Data;
         }
 
+        public Transfer GetTransferById(int transferId)
+        {
+            client.Authenticator = new JwtAuthenticator(UserService.GetToken());
+            RestRequest request = new RestRequest(API_BASE_URL + $"transfers/{transferId}");
+            IRestResponse<Transfer> response = client.Get<Transfer>(request);
+            return response.Data;
+        }
+
         public Transfer CreateNewTransfer(Transfer transfer)
         {
             client.Authenticator = new JwtAuthenticator(UserService.GetToken());

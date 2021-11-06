@@ -78,7 +78,7 @@ namespace TenmoClient
                 Console.WriteLine("Welcome to TEnmo! Please make a selection: ");
                 Console.WriteLine("1: View your current balance");
                 Console.WriteLine("2: View your past transfers");
-                Console.WriteLine("3: View your pending requests");
+                Console.WriteLine("3: View an idividual transfer");
                 Console.WriteLine("4: Send TE bucks");
                 Console.WriteLine("5: Request TE bucks");
                 Console.WriteLine("6: Log in as different user");
@@ -105,8 +105,8 @@ namespace TenmoClient
                 }
                 else if (menuSelection == 3)
                 {
-                    
-                    
+                    int tranferId = consoleService.PromptForTransferID("view");
+                    Console.WriteLine(transferService.GetTransferById(tranferId).FormattedTransfer);
                 }
                 else if (menuSelection == 4)
                 {
