@@ -120,6 +120,8 @@ namespace TenmoClient
                     {
                         Console.WriteLine(user.FormattedUser());
                     }
+                    //hypothetical future TODO: get user by ID from endpoint to validate that they exist
+                    // before we allow the user to continue
                     int toAccountId = consoleService.PromptForRecipientID();
                     decimal amount = consoleService.PromptForAmount();
 
