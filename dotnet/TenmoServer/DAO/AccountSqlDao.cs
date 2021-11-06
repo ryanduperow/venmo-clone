@@ -71,7 +71,6 @@ namespace TenmoServer.DAO
 
         public bool WithdrawFromAccount(int accountId, decimal amountToWithdraw)
         {
-            //TODO: check overdrawing here or in the controller??
             decimal balance = GetAccountById(accountId).Balance;
             if (amountToWithdraw > balance)
             {
@@ -102,7 +101,7 @@ namespace TenmoServer.DAO
 
         public Account GetAccountById(int accountId)
         {
-            Account account = new Account();
+            Account account = null;
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
