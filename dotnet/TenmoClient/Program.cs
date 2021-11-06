@@ -105,8 +105,10 @@ namespace TenmoClient
                 }
                 else if (menuSelection == 3)
                 {
-                    int tranferId = consoleService.PromptForTransferID("view");
-                    Console.WriteLine(transferService.GetTransferById(tranferId).FormattedTransfer);
+
+                        int tranferId = consoleService.PromptForTransferID("view");
+                        Console.WriteLine(transferService.GetTransferById(tranferId));
+                 
                 }
                 else if (menuSelection == 4)
                 {
@@ -128,7 +130,7 @@ namespace TenmoClient
                         Amount = amount
                     };
 
-                    Console.WriteLine("Response:", transferService.CreateNewTransfer(transfer));
+                    Console.WriteLine(transferService.CreateNewTransfer(transfer));
                     Console.ReadLine();
                 }
                 else if (menuSelection == 5)
